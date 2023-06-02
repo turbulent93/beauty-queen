@@ -1,0 +1,1 @@
+export const PERIOD_INTERVAL = 30

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply overflow-x-hidden
+}
+
+@layer utilities {
+    .scrollbar::-webkit-scrollbar {
+        @apply h-1 w-1
+    }
+
+    .scrollbar-red::-webkit-scrollbar-track {
+        @apply bg-red-300 rounded-sm border
+    }
+
+    .scrollbar-red::-webkit-scrollbar-thumb {
+        @apply bg-red-400 rounded-sm
+    }
+
+    .scrollbar-gray::-webkit-scrollbar-track {
+        @apply bg-gray-400 rounded-sm border
+    }
+
+    .scrollbar-gray::-webkit-scrollbar-thumb {
+        @apply bg-gray-500 rounded-sm
+    }
+}
