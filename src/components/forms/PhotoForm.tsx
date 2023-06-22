@@ -27,15 +27,14 @@ interface PhotoFormProps {
     serviceId?: number
 }
 
-const EMPLOYEES_IMAGES_URL = "https://localhost:7169/files/gallery"
+const GALLERY_IMAGES_URL = process.env.GALLERY_IMAGES_URL || ""
 
 export const PhotoForm: FC<PhotoFormProps> = ({mutate, serviceId}) => {
     const router = useRouter()
 
-    const {handleSubmit, control, register, setValue, getValues, reset, watch} = useForm<IGallery>(serviceId ? {defaultValues: {serviceId}} : {})
+    const {handleSubmit, control, register, setValue, getValues, reset} = useForm<IGallery>(serviceId ? {defaultValues: {serviceId}} : {})
 
     const onSubmit: SubmitHandler<IGallery> = data => {
-        console.log("submit service", data.serviceId)
         data.photos.forEach(photo => {
             mutate({
                 ...data,
@@ -43,12 +42,6 @@ export const PhotoForm: FC<PhotoFormProps> = ({mutate, serviceId}) => {
             })
         })
     }
-
-    const id = watch("serviceId")
-
-    useEffect(() => {
-        console.log("service", id)
-    }, [watch("serviceId")])
 
     const uploadMutation = useImageMutation(
         (image) => {
@@ -94,7 +87,7 @@ export const PhotoForm: FC<PhotoFormProps> = ({mutate, serviceId}) => {
                         multiple
                         upload={(image) => uploadMutation.mutate(image)}
                         value={field.value}
-                        path={EMPLOYEES_IMAGES_URL}
+                        path={GALLERY_IMAGES_URL}
                         remove={(value) => {
                             reset({
                                 ...getValues(),

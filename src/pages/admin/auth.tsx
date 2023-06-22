@@ -7,52 +7,43 @@ import { useRouter } from "next/router";
 import { AuthService } from "@/services/auth/auth.service";
 import { useMutation } from "react-query";
 import { useToast } from "@/hooks/useToast";
-import { catchError } from "@/api/api.handler";
+import { catchError, setTokens } from "@/api/api.handler";
 import { AxiosError } from "axios";
 import { ILoginDto } from "@/services/auth/auth.interface";
+import { Form } from "@/ui/Form";
+import { useAuth } from "@/providers/AuthProvider";
 
 const AdminAuth: NextPage = () => {
     const {register, handleSubmit} = useForm<ILoginDto>()
     const {replace} = useRouter()
+    const {setUser} = useAuth()
+
     const loginMutation = useMutation((data: ILoginDto) => AuthService.login(data), {
         onError: (error: AxiosError) => useToast(catchError(error)),
-        onSuccess: () => {
+        onSuccess: ({data}) => {
             useToast("", true)
             replace("/admin/appointments")
+            setUser({login: data.login, role: data.role, userId: data.userId})
         }
     })
-    const registrationMutation = useMutation((data: ILoginDto) => AuthService.register(data), {
-        onError: (error: AxiosError) => useToast(catchError(error)),
-        onSuccess: () => useToast("", true)
-    })
-
-
-    const onSubmitRegister: SubmitHandler<ILoginDto> = data => {
-        registrationMutation.mutate(data)
-    }
-
     const onSubmitLogin: SubmitHandler<ILoginDto> = data => {
         loginMutation.mutate(data)
     }
 
     return (
         <Layout title="admin">
-            <div className="w-[600px] mx-auto">
-            <form 
-                className="w-56 mx-auto bg-slate-500 rounded-md py-8 px-6 mt-24"
-                >
+            <Form onSubmit={handleSubmit(onSubmitLogin)} className="mt-44">
                 <Input 
                     {...register("login")}
-                    placeholder="Login" 
-                    label="Login" />
+                    placeholder="Логин" 
+                    label="Логин" />
                 <Input 
                     {...register("password")}
-                    placeholder="Password" 
-                    label="Password" />
-                <Button onClick={handleSubmit(onSubmitRegister)} className="mr-2">Register</Button>
-                <Button onClick={handleSubmit(onSubmitLogin)}>Login</Button>
-            </form>
-            </div>
+                    type="password"
+                    placeholder="Пароль" 
+                    label="Пароль" />
+                <Button theme="gray" className="w-full">Войти</Button>
+            </Form>
         </Layout>
     )
 }

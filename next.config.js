@@ -9,6 +9,9 @@ const nextConfig = {
     ACCESS_TOKEN: process.env.ACCESS_TOKEN,
     REFRESH_TOKEN: process.env.REFRESH_TOKEN,
 
+    GALLERY_IMAGES_URL: process.env.GALLERY_IMAGES_URL,
+    EMPLOYEES_IMAGES_URL: process.env.EMPLOYEES_IMAGES_URL,
+    
     EMPLOYEE_PATH: process.env.EMPLOYEE_PATH,
     EMPLOYEE_IMAGES_PATH: process.env.EMPLOYEE_IMAGES_PATH,
     SERVICE_PATH: process.env.SERVICE_PATH,

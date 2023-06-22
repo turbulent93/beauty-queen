@@ -30,7 +30,7 @@ const UserForm: NextPage = () => {
     }
 
     return (
-        <Layout title="Добавить пользователя">
+        <Layout title="Добавить пользователя" role="Админ">
             <Sidebar>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <FormTitle>

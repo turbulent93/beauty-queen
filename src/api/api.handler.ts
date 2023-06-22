@@ -26,3 +26,8 @@ export const setTokens = (tokens: IAuthDto) => {
     localStorage.setItem(ACCESS_TOKEN, tokens.accessToken)
     localStorage.setItem(REFRESH_TOKEN, tokens.refreshToken)
 }
+
+export const removeTokens = () => {
+    localStorage.removeItem(ACCESS_TOKEN)
+    localStorage.removeItem(REFRESH_TOKEN)
+}

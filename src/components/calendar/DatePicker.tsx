@@ -1,7 +1,7 @@
 import { Grid } from "@/components/Grid";
 import { useAddScheduleMutation } from "@/hooks/calendar/useAddScheduleMutation";
 import { useRemoveScheduleMutation } from "@/hooks/calendar/useRemoveScheduleMutation";
-import { CalendarModeType, IDate, IMonth } from "@/interfaces/calendar.interface";
+import { IDate, IMonth } from "@/interfaces/calendar.interface";
 import { ScheduleService } from "@/services/schedule/schedule.service";
 import { setSchedule, setScheduleId } from "@/store/appointment.slice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -11,11 +11,12 @@ import clsx from "clsx";
 import { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Error } from "@/ui/Error";
+import { ModeType } from "@/interfaces/mode.interface";
 
 interface DatePickerProps {
     selectedMonth?: IMonth
     selectedYear: number
-    mode: CalendarModeType
+    mode: ModeType
     employeeId?: number
 }
 
@@ -50,6 +51,8 @@ export const DatePicker: FC<DatePickerProps> = (
             }
         })
 
+        // console.log(employee)
+
     // useEffect(() => {
     //     // console.log("date use effect")
     //     console.log(selectedDate)
@@ -57,9 +60,7 @@ export const DatePicker: FC<DatePickerProps> = (
 
     useEffect(() => {
         // console.log("month changed", prevMonth, selectedMonth)
-        if(mode == "admin") {
-
-        } else if(prevMonth && prevMonth != selectedMonth) {
+        if(prevMonth && prevMonth != selectedMonth) {
             // console.log("month use effect", prevMonth, selectedMonth)
             setSelectedDate(undefined)
             dispatch(setSchedule(undefined))
@@ -85,6 +86,10 @@ export const DatePicker: FC<DatePickerProps> = (
     }
 
     const handler = (date: IDate) => {
+        if(mode == "master") {
+            return
+        }
+
         const schedule = findSchedule(date)
 
         if(mode == "user" && schedule) {

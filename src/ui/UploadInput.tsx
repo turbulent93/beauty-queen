@@ -9,7 +9,6 @@ import { RiDeleteBin5Line } from "react-icons/ri"
 const EMPLOYEES_IMAGES_URL = process.env.EMPLOYEES_IMAGES_URL || ""
 
 type UploadInputProps = {
-    type?: "file"
     placeholder: string
     multiple?: true
     upload: (files: FileList) => void
@@ -19,10 +18,6 @@ type UploadInputProps = {
 }
 
 export const UploadInput: FC<UploadInputProps> = ({placeholder, multiple, upload, value, path, remove}) => {
-    // useEffect(() => {
-    //     console.log(value)
-    // }, [value])
-
     return(
         <div className="flex flex-col mb-4">
             <label className="mb-2 text-gray-500">
@@ -30,8 +25,13 @@ export const UploadInput: FC<UploadInputProps> = ({placeholder, multiple, upload
             </label>
             <div className="flex gap-1 flex-wrap">
                 {
-                    (value as string[]) ? 
-                        (value as string[]).map(photo => (
+                    !multiple ? 
+                    (value as string) && (
+                        <img 
+                            src={`${path}/${value}`}
+                            className="h-28 rounded-sm object-cover"/>
+                    ) :
+                        (value as string[])?.map(photo => (
                             <div className="relative" key={photo}>
                                 <img 
                                     src={`${path}/${photo}`}
@@ -44,11 +44,7 @@ export const UploadInput: FC<UploadInputProps> = ({placeholder, multiple, upload
                                     </div>
                                 </div>
                             </div>
-                    )) : (value as string) && (
-                        <img 
-                            src={`${path}/${value}`}
-                            className="h-28 rounded-sm object-cover"/>
-                    )
+                    ))
                 }
                 <label className="h-28 w-36 flex items-center justify-center bg-slate-100 rounded-sm cursor-pointer border text-gray-500">
                     <AiOutlineUpload className="text-[22px] mr-2"/>

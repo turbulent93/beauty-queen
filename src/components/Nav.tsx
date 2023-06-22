@@ -1,3 +1,4 @@
+import { Button } from "@/ui/Button";
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -12,16 +13,20 @@ interface INavItem {
 
 const navItems: INavItem[] = [
     {
-        path: "/about-us",
-        name: "О нас"
+        path: "/gallery",
+        name: "Галерея"
+    },
+    {
+        path: "/employees",
+        name: "Мастера"
+    },
+    {
+        path: "/price-list",
+        name: "Прайс-лист"
     },
     {
         path: "/admin/employees",
         name: "Admin"
-    },
-    {
-        path: "/appointment",
-        name: "Записаться"
     }
 ]
 
@@ -38,7 +43,7 @@ export const Nav: FC = () => {
                         </div>
                         <h1 className="text-white cursor-pointer select-none text-[20px]">Королева Красоты</h1>
                     </Link>
-                    <div className="gap-3 flex">
+                    <div className="gap-4 flex items-center">
                         {
                             navItems.map(x => (
                                 <Link key={x.name} href={x.path} className={clsx("select-none", 
@@ -48,6 +53,11 @@ export const Nav: FC = () => {
                                 </Link>
                             ))
                         }
+                        <Link href="/appointment">
+                            <Button>
+                                Записаться
+                            </Button>
+                        </Link>
                     </div>
                 </nav>
             </Container>

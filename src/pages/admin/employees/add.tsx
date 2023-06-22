@@ -20,7 +20,7 @@ const AddEmployee: NextPage = () => {
     })
 
     return (
-        <Layout title="Добавить сотрудника">
+        <Layout title="Добавить сотрудника" role="Админ">
             <Sidebar>
                 <EmployeeForm mutate={data => mutation.mutate(useFormData(data))} title="Добавить сотрудника"/>
             </Sidebar>

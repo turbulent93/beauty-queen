@@ -13,6 +13,8 @@ import { Error } from "@/ui/Error";
 import { IEmployee, IEmployeeDto } from "@/services/employee/employee.interface";
 import { IService } from "@/services/service/service.interface";
 import { EmployeeForm } from "@/components/forms/EmployeeForm";
+import { useAuth } from "@/providers/AuthProvider";
+import { useEffect } from "react";
 
 const UpdateEmployee: NextPage = () => {
     const router = useRouter()
@@ -25,12 +27,16 @@ const UpdateEmployee: NextPage = () => {
             select: (data): IEmployee => {
                 const res: IEmployeeDto = data?.data
                 return {
-                    ...res,
+                    id: res.id,
+                    image: res.image,
+                    name: res.name,
+                    surname: res.surname,
                     serviceIds: res.services.map((x: IService) => x.id),
                     specializationId: res.specialization.id,
-                    userId: res.user.id
-                }
-            }
+                    userId: res.user.id 
+                } as IEmployee
+            },
+            onSuccess: (data) => console.log(data)
         })
     const mutation = useMutation((data: IEmployee) => EmployeeService.update(data.id, useFormData(data)), {
         onError: (error: AxiosError) => useToast(catchError(error)),
@@ -38,11 +44,12 @@ const UpdateEmployee: NextPage = () => {
             useToast("Сотрудник обновлен", true)
             router.replace("/admin/employees")
             queryClient.invalidateQueries(["get employees"])
+            queryClient.invalidateQueries(["get employee", id])
         }
     })
 
     return (
-        <Layout title="Изменить сотрудника">
+        <Layout title="Изменить сотрудника" role="Админ">
             <Sidebar>
                 {
                     isLoading ? <Loader className="mt-8"/> :

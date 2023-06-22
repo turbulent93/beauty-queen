@@ -4,17 +4,20 @@ import Link from "next/link";
 
 import { FaCrown, FaCogs } from "react-icons/fa"
 import { ImStatsBars } from "react-icons/im"
-import { AiOutlineBook, AiOutlineSchedule, AiOutlineUser, AiOutlineFileImage, AiOutlineLogout, AiOutlineArrowRight } from "react-icons/ai"
+import { AiOutlineBook, AiOutlineSchedule, AiOutlineUser, AiOutlineFileImage, AiOutlineLogout, AiOutlineArrowRight, AiOutlinePercentage } from "react-icons/ai"
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleIsOpen } from "@/store/sidebar.slice";
 import { BsScissors } from "react-icons/bs"
+import { useAuth } from "@/providers/AuthProvider";
+import { removeTokens } from "@/api/api.handler";
 
 const routes = [
     {
         title: "Сотрудники",
         href: "/admin/employees",
-        Icon: AiOutlineUser
+        Icon: AiOutlineUser,
+        role: "Админ"
     },
     {
         title: "Расписание",
@@ -22,14 +25,22 @@ const routes = [
         Icon: AiOutlineSchedule
     },
     {
+        title: "Промо",
+        href: "/admin/promo",
+        Icon: AiOutlinePercentage,
+        role: "Админ"
+    },
+    {
         title: "Услуги",
         href: "/admin/services",
-        Icon: FaCogs
+        Icon: FaCogs,
+        role: "Админ"
     },
     {
         title: "Специализации",
         href: "/admin/specializations",
-        Icon: BsScissors
+        Icon: BsScissors,
+        role: "Админ"
     },
     {
         title: "Записи",
@@ -39,7 +50,8 @@ const routes = [
     {
         title: "Статистика",
         href: "/admin/statistics",
-        Icon: ImStatsBars
+        Icon: ImStatsBars,
+        role: "Админ"
     },
     {
         title: "Галерея",
@@ -57,6 +69,7 @@ export const Sidebar: FC<PropsWithChildren> = ({children}) => {
     const {pathname} = useRouter()
     const dispatch = useAppDispatch()
     const open = useAppSelector(store => store.sidebar.isOpen)
+    const {user, setUser} = useAuth()
 
     const handler = () => {
         dispatch(toggleIsOpen())
@@ -80,7 +93,7 @@ export const Sidebar: FC<PropsWithChildren> = ({children}) => {
                             <h1 className={clsx("text-white text-[20px]", {
                                 "hidden": !open
                             })}>
-                                Название
+                                Королева красоты
                             </h1>
                         </div>
                     </Link>
@@ -91,13 +104,21 @@ export const Sidebar: FC<PropsWithChildren> = ({children}) => {
                         onClick={() => handler()}>
                         <AiOutlineArrowRight/>
                     </div>
-                    {routes.map(route => (
+                    {routes
+                        .filter(route => user?.role == "Админ" || (user?.role == "Сотрудник" && route?.role != "Админ"))
+                        .map(route => (
                         <Link href={route.href} 
+                            onClick={() => {
+                                if(route.title == "Выйти") {
+                                    setUser(undefined)
+                                    removeTokens()
+                                }
+                            }}
                             key={route.title} 
                             className={clsx(
                                 "flex gap-2 text-white items-center hover:bg-stone-700 p-4 rounded-sm cursor-pointer",
                                 {
-                                    "bg-red-400": pathname.includes(route.href) 
+                                    "bg-red-400": pathname.includes(route.href)
                                 }
                             )}>
                             <div>
@@ -107,7 +128,10 @@ export const Sidebar: FC<PropsWithChildren> = ({children}) => {
                                 "text-[16px]",
                                 {
                                     "hidden": !open
-                                })}>{route.title}</span>
+                                })}>
+                                    {route.title}
+                                </span>
+                            
                         </Link>
                     ))}
                 </div>

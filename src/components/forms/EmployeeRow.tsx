@@ -23,7 +23,7 @@ export const EmployeeRow: FC<EmployeeRowProps> = ({employee}) => {
                 <div className="w-[220px]">
                     <img 
                         src={`${process.env.EMPLOYEES_IMAGES_URL}/${employee.image}`} 
-                        className="rounded-sm" />
+                        className="rounded-sm object-contain h-44" />
                 </div>
             </Td>
             <Td className="text-left">

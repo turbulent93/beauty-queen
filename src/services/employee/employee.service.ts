@@ -1,14 +1,16 @@
 import { instance } from "@/api/api.interceptor"
+import axios from "axios"
 import { IEmployeeDto } from "./employee.interface"
 
 const EMPLOYEE_PATH = process.env.EMPLOYEE_PATH || ""
+const API_URL = process.env.API_URL || ""
 
 export const EmployeeService = {
     post(data: FormData) {
         return instance.post(EMPLOYEE_PATH, data)
     },
     get(search?: string) {
-        return instance.get<IEmployeeDto[]>(EMPLOYEE_PATH, search ? {params: {search}} : {})
+        return axios.get<IEmployeeDto[]>(API_URL + EMPLOYEE_PATH, search ? {params: {search}} : {})
     },
     getByService(serviceId: number, search?: string) {
         return instance.get<IEmployeeDto[]>(`${EMPLOYEE_PATH}/by-service/${serviceId}`, search ? {params: {search}} : {})

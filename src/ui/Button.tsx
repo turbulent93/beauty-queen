@@ -18,6 +18,7 @@ export const Button: FC<PropsWithChildren<IButtonProps>> = ({children, disabled 
                 "bg-slate-500 text-white": theme == "gray" && !disabled,
                 "bg-slate-400 text-white": theme == "gray" && disabled
             })}
+            disabled={disabled}
             onClick={onClick}
             >{children}
         </button>

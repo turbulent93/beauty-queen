@@ -4,7 +4,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { AdminHeader } from "@/components/AdminHeader";
 import { SearchSelect } from "@/ui/SearchSelect";
 import { useEmployeeQuery } from "@/hooks/useEmployeeQuery";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Table } from "@/ui/table/Table";
 import { Th } from "@/ui/table/Th";
 import { useQuery } from "react-query";
@@ -17,16 +17,23 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { Loader } from "@/ui/Loader";
 import { Error } from "@/ui/Error";
 import { parsePeriod } from "@/utils/calendar/timepicker/parsePeriod";
+import { useAuth } from "@/providers/AuthProvider";
+
+const compareDates = (date1: Date, date2: Date) => {
+    return date1.getFullYear() == date2.getFullYear() && 
+        date1.getMonth() == date2.getMonth() &&
+        date1.getDate() == date2.getDate()
+}
 
 const getCurrentDate = (date: Date) => {
-    date.setHours(0, 0, 0, 0)
-    const currentDate = new Date(),
-        diff = Math.abs(currentDate.getTime() - date.getTime()) / 1000 / 60 / 60 / 24,
-        dateDiff = currentDate.getDate() - date.getDate()
+    const currentDate = new Date()
 
-    if(diff < 1 && dateDiff == 0) {
+    if(compareDates(currentDate, date)) {
         return "Сегодня"
-    } else if(diff < 1 && dateDiff != 0) {
+    }
+    currentDate.setDate(currentDate.getDate() + 1)
+
+    if(compareDates(currentDate, date)) {
         return "Завтра"
     } else {
         return dateOnlyConverter(date)
@@ -44,6 +51,7 @@ const isDone = (date: Date, endAt: string) => {
 }
 
 const AdminAppointments: NextPage = () => {
+    const {user} = useAuth()
     const [employeeId, setEmployeeId] = useState<number>()
     const [scheduleId, setScheduleId] = useState<number>()
     
@@ -56,18 +64,28 @@ const AdminAppointments: NextPage = () => {
 
     const {data: apps, isLoading: isAppsLoading, isError: isAppsError} = useAppsQuery(employeeId, scheduleId)
 
+    useEffect(() => {
+        user?.role == "Сотрудник" && setEmployeeId(user?.userId)
+    }, [user])
+
     return (
-        <Layout title="Записи">
+        <Layout title="Записи" role="Сотрудник">
             <Sidebar>
                 <AdminHeader className="mb-4">
-                    <label className="mx-4 text-gray-600">
-                        Сотрудник
-                    </label>
-                    <SearchSelect 
-                        className="w-[240px] mr-4"
-                        value={employeeId}
-                        onChange={setEmployeeId}
-                        onSearch={() => useEmployeeQuery()}/>
+                    {
+                        user?.role == "Админ" && (
+                            <>
+                                <label className="mx-4 text-gray-600">
+                                    Сотрудник
+                                </label>
+                                <SearchSelect 
+                                    className="w-[240px] mr-4"
+                                    value={employeeId}
+                                    onChange={setEmployeeId}
+                                    onSearch={() => useEmployeeQuery()}/>
+                            </>
+                        )
+                    }
                     <label className="mx-4 text-gray-600">
                         День
                     </label>

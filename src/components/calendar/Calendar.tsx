@@ -1,16 +1,17 @@
 import { FC } from "react";
 import { useState, useEffect } from "react"
-import { CalendarModeType, IMonth } from "@/interfaces/calendar.interface";
+import { IMonth } from "@/interfaces/calendar.interface";
 import { YearPicker } from "./YearPicker";
 import { MonthPicker } from "./MonthPicker";
 import { DatePicker } from "./DatePicker";
 import { TimePicker } from "./TimePicker";
 import { useAppSelector } from "@/store/hooks";
+import { ModeType } from "@/interfaces/mode.interface";
 
 type CalendarProps = {
     employeeId?: number
     className?: string
-    mode?: CalendarModeType
+    mode?: ModeType
 }
 
 const getSelectedYear = (date?: string) => {

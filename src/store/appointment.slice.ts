@@ -14,11 +14,13 @@ const initialState: IInitialState = {
     schedule: {},
 }
 
+type ServicePickType = Pick<IService, "id" | "duration">
+
 const appointmentSlice = createSlice({
     name: "appointment",
     initialState,
     reducers: {
-        setService: (state, action: PayloadAction<IService>) => {
+        setService: (state, action: PayloadAction<ServicePickType>) => {
             state.appointment = {
                 ...state.appointment,
                 serviceId: action.payload.id

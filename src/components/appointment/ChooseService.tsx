@@ -1,4 +1,5 @@
 import { useDebounce } from "@/hooks/useDebounce";
+import { PromoService } from "@/services/promo/promo.service";
 import { IService } from "@/services/service/service.interface";
 import { ServiceService } from "@/services/service/service.service";
 import { setService } from "@/store/appointment.slice";
@@ -8,84 +9,50 @@ import { Search } from "@/ui/Search";
 import { Table } from "@/ui/table/Table";
 import { Td } from "@/ui/table/Td";
 import { Th } from "@/ui/table/Th";
+import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { useQuery } from "react-query";
+import { PriceList } from "../PriceList";
 
 interface ChooseServiceProps {
     goNext: () => void
+    promoId?: number
 }
 
-export const ChooseService: FC<ChooseServiceProps> = ({goNext}) => {
-    const [search, setSearch] = useState("")
+export const ChooseService: FC<ChooseServiceProps> = ({goNext, promoId}) => {
     const dispatch = useAppDispatch()
+    const app = useAppSelector(store => store.appointment.appointment)
+
+    const [search, setSearch] = useState("")
     const debounce = useDebounce(search)
-    const serviceId = useAppSelector(store => store.appointment.appointment.serviceId)
-    const [selectedService, setSelectedService] = useState<IService>()
 
-    const {data, isLoading} = useQuery(["search services", debounce], 
-        () => ServiceService.get(debounce), {
-            select: ({data}) => data,
-            onSuccess: (data) => {
-                setSelectedService(data?.find(service => service.id == serviceId))
-                console.log(search)
-            }
-        })
-
-    const handler = (x: IService) => {
-        dispatch(setService(x))
+    const handler = (service: IService) => {
+        dispatch(setService({...service}))
         goNext()
     }
 
+    const {data: promo} = useQuery(["get promo", promoId], () => PromoService.getById(promoId!), {
+        enabled: !!promoId,
+        select: ({data}) => data
+    })
+
+    const {data: services} = useQuery(["get services", app.employeeId, promoId], 
+        () => ServiceService.get(undefined, app.employeeId, promoId), {
+        select: ({data}) => data
+    })
+
     return (
         <>
-            <div className="flex">
                 <Search 
                     search={search} 
                     setSearch={setSearch} 
-                    className="my-4 w-[220px] mr-auto"
-                    placeholder="Поиск услуги..."/>
-                {
-                    isLoading && <Loader />
-                }
-            </div>
-            <Table>
-                <thead>
-                    <tr>
-                        <Th>
-                            Название
-                        </Th>
-                        <Th>
-                            Цена
-                        </Th>
-                        <Th>
-                            Длительность
-                        </Th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        data?.map(service => (
-                            <tr 
-                                onClick={() => handler(service)} 
-                                className={"cursor-pointer hover:border hover:border-gray-200" + (
-                                    selectedService == service &&
-                                        " bg-slate-400 text-white"
-                                )}
-                                key={service.id}>
-                                <Td>
-                                    {service.name}
-                                </Td>
-                                <Td>
-                                    {service.price}
-                                </Td>
-                                <Td>
-                                    {service.duration + " мин"}
-                                </Td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </Table>
+                    placeholder="Поиск по названию.." 
+                    className="my-6 w-[300px]"/>
+                <PriceList 
+                    enableHide={false} 
+                    handler={handler} 
+                    services={services} 
+                    discount={promo?.discount}/>
         </>
-    )
+    )   
 }

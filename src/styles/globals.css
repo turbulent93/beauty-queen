@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply overflow-x-hidden
+    @apply overflow-x-hidden select-none
 }
 
 @layer utilities {

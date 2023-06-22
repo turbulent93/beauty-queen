@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@pbe/react-yandex-maps": "^1.2.4",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "18.15.7",
     "@types/react": "18.0.29",
@@ -23,6 +24,7 @@
     "react-query": "^3.39.3",
     "react-redux": "^8.0.5",
     "react-select": "^5.7.2",
+    "recharts": "^2.7.1",
     "typescript": "5.0.2"
   },
   "devDependencies": {

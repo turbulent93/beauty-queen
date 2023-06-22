@@ -23,7 +23,7 @@ const AdminServices: NextPage = () => {
     })
 
     return (
-        <Layout title="Услуги">
+        <Layout title="Услуги" role="Админ">
             <Sidebar>
                 <ServiceForm 
                     mutate={data => mutation.mutate(data)} 

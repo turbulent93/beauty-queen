@@ -1,4 +1,5 @@
 import { ToastBar } from '@/components/ToastBar'
+import { AuthProvider } from '@/providers/AuthProvider'
 import store from '@/store/store'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
@@ -18,8 +19,10 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <QueryClientProvider client={client}>
-        <Component {...pageProps} />
-        <ToastBar />
+        <AuthProvider>
+          <Component {...pageProps} />
+          <ToastBar />
+        </AuthProvider>
       </QueryClientProvider>
     </Provider>
   )

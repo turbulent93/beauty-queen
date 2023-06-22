@@ -23,5 +23,3 @@ export interface PeriodInterval {
     startAt: string
     endAt: string
 }
-
-export type CalendarModeType = "admin" | "user"

@@ -12,6 +12,7 @@ import { Th } from "@/ui/table/Th";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 const Services: NextPage = () => {
@@ -27,8 +28,12 @@ const Services: NextPage = () => {
         onSuccess: () => queryclient.invalidateQueries(["get services"])
     })
 
+    useEffect(() => {
+        console.log(services)
+    }, [services])
+
     return (
-        <Layout title="Услуги">
+        <Layout title="Услуги" role="Админ">
             <Sidebar>
                 <AdminHeader className="mb-6">
                     <Button theme="light-gray" onClick={() => router.push("services/add")}>Добавить услугу</Button>

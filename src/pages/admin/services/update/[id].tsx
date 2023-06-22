@@ -34,7 +34,7 @@ const UpdateService: NextPage = () => {
     })
 
     return (
-        <Layout title="Изменить услугу">
+        <Layout title="Изменить услугу" role="Админ">
             <Sidebar>
                 {
                     isLoading ? <Loader/> :

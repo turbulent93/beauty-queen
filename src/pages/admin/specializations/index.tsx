@@ -37,7 +37,7 @@ const SpecsPage: NextPage = () => {
     }
 
     return (
-        <Layout title="Специализации">
+        <Layout title="Специализации" role="Админ">
             <Sidebar>
                 <AdminHeader>
                     Специализации

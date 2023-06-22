@@ -10,21 +10,22 @@ import { Search } from "@/ui/Search";
 import { FC, useState } from "react";
 import { useQuery } from "react-query";
 import { EmployeeCard } from "../EmployeeCard";
+import { EmployeeList } from "../EmployeeList";
 
 interface IChooseEmployeeProps {
     goNext: () => void
 }
 
 export const ChooseEmployee: FC<IChooseEmployeeProps> = ({goNext}) => {
-    const serviceId = useAppSelector(store => store.appointment.appointment.serviceId)
+    const app = useAppSelector(store => store.appointment.appointment)
     const dispatch = useAppDispatch()
 
     const [search, setSearch] = useState("")
     const debounce = useDebounce(search)
     const [isRandomError, setIsRandomError] = useState(false)
 
-    const {data, isLoading, isError} = useQuery(["get employees by service", debounce], 
-        () => EmployeeService.getByService(serviceId!, debounce), {
+    const {data} = useQuery(["get employees by service", debounce], 
+        () => EmployeeService.getByService(app.serviceId!, debounce), {
             select: ({data}) => data
         })
 
@@ -60,18 +61,7 @@ export const ChooseEmployee: FC<IChooseEmployeeProps> = ({goNext}) => {
                     isRandomError && <Error className="w-[240px]"/>
                 }
             </div>
-            <div className="flex gap-4 scrollbar scrollbar-gray pb-1">
-                {
-                    isLoading ? <Loader/> :
-                    isError ? <Error className="mx-auto"/> :
-                    data?.map(employee => (
-                        <EmployeeCard
-                            key={employee.id}
-                            employee={employee}
-                            onClick={handler}/>
-                    ))
-                }
-            </div>
+            <EmployeeList employees={data} handler={handler} employeeId={app.employeeId}/>
         </>
     )
 }

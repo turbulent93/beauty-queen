@@ -30,7 +30,7 @@ const AddPhoto: NextPage = () => {
     })
 
     return (
-        <Layout title="Добавить фото">
+        <Layout title="Добавить фото" role="Сотрудник">
             <Sidebar>
                 <PhotoForm 
                     serviceId={Number(id)}

@@ -22,7 +22,6 @@ export const ChooseNumber: FC<ChooseNumberProps> = ({goBack}) => {
     const handler = () => {
         addMutation.mutate(app.appointment as IAppointmentDto)
         router.replace("/")
-        console.log(app.appointment as IAppointmentDto)
         dispatch(resetAppointment())
     }
 
