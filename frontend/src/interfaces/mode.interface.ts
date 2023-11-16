@@ -1,0 +1,1 @@
+export type EditModeType = "fill-start-date" | "fill-end-date"

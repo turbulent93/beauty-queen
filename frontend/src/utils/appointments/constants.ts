@@ -1,0 +1,1 @@
+export const APPOINTMENTS_LS_KEY = "bq-appointments"
