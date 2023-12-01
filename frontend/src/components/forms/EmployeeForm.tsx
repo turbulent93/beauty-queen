@@ -37,6 +37,7 @@ export const EmployeeForm: FC<EmployeeFormProps> = ({
         control, 
         handleSubmit, 
         reset, 
+        getValues,
         formState: {errors} 
     } = useForm<IEmployeeWithIdsDto>()
 
@@ -127,7 +128,8 @@ export const EmployeeForm: FC<EmployeeFormProps> = ({
                     <UploadInput 
                         placeholder="Фото"  
                         setValue={field.onChange}
-                        error={!!fieldState.error}/>
+                        error={!!fieldState.error}
+                        value={getValues("image")}/>
                 )}/>
             <FormButtons isAdd={!defaultValues}/>
         </Form>

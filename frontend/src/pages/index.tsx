@@ -15,9 +15,10 @@ import { useRouter } from 'next/router'
 import { SettingsService } from '@/services/settings/settings.service'
 import { MetaService } from '@/services/meta/meta.service'
 
-const Home: NextPage = (
-	{services, employees, promos, settings, meta
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+// const Home: NextPage = (
+// 	{services, employees, promos, settings, meta
+// }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Home: NextPage = () => {
 	const router = useRouter()
 
 	const serviceHandler = (service: IService) => {
@@ -30,22 +31,23 @@ const Home: NextPage = (
 
 	return (
 		<Layout 
-			title={meta?.title || "No title"} 
-			description={meta?.description || "No description"}
-			favicon={settings?.favicon || "favicon"}
-			contactSettings={{
-				address: settings.address, 
-				mail: settings.male,
-				phone: settings.phone,
-				vk: settings.vk
-			}}
+			title='Главная'
+			// title={meta?.title || "No title"} 
+			// description={meta?.description || "No description"}
+			// favicon={settings?.favicon || "favicon"}
+			// contactSettings={{
+			// 	address: settings.address, 
+			// 	mail: settings.male,
+			// 	phone: settings.phone,
+			// 	vk: settings.vk
+			// }}
 		>
-			<Main settings={{
+			{/* <Main settings={{
 				mainDescription: settings.mainDescription,
 				mainPhoto: settings.mainPhoto,
 				mainTitle: settings.mainTitle
-			}}/>
-			<Container>
+			}}/> */}
+			{/* <Container>
 				{
 					promos.length > 1 && (
 						<>
@@ -78,45 +80,45 @@ const Home: NextPage = (
 							<PriceList handler={serviceHandler} services={services}/>
 						</>
 					)
-				}
+				} */}
 				{/* <Title>
 					Галерея работ
 				</Title>
 				<PhotosList photos={photos} /> */}
-			</Container>
+			{/* </Container> */}
 		</Layout>
 	)
 }
 
 export default Home
 
-export const getStaticProps: GetStaticProps = async () => {
-    const services = await ServiceService.get()
-      	.then(res => res.data)
+// export const getStaticProps: GetStaticProps = async () => {
+//     const services = await ServiceService.get()
+//       	.then(res => res.data)
 
-	// const photos = await GalleryService.getFavorites()
-	// 	.then(res => res.data)
+// 	// const photos = await GalleryService.getFavorites()
+// 	// 	.then(res => res.data)
 
-	const employees = await EmployeeService.get()
-		.then(res => res.data)
+// 	const employees = await EmployeeService.get()
+// 		.then(res => res.data)
 
-	const promos = await PromoService.get()
-		.then(res => res.data)
+// 	const promos = await PromoService.get()
+// 		.then(res => res.data)
 
-	const settings = await SettingsService.get()
-		.then(res => res.data)
+// 	const settings = await SettingsService.get()
+// 		.then(res => res.data)
 
-	const meta = await MetaService.get()
-		.then(res => res.data)
+// 	const meta = await MetaService.get()
+// 		.then(res => res.data)
 
-	return {
-		props: {
-			services,
-			// photos,
-			employees,
-			promos,
-			settings,
-			meta
-		}
-	}
-}
+// 	return {
+// 		props: {
+// 			services,
+// 			// photos,
+// 			employees,
+// 			promos,
+// 			settings,
+// 			meta
+// 		}
+// 	}
+// }

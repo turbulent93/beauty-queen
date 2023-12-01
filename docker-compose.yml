@@ -1,0 +1,55 @@
+version: "3.9"
+networks:
+  beauty-queen-dev:
+    driver: bridge
+services:
+  app:
+    container_name: beauty-queen-app
+    image: docker.io/library/beauty-queen-app
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports: 
+      - "80:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+  api:
+    container_name: beauty-queen-api
+    image: docker.io/library/beautyqueenapi123
+    build:
+      context: BeautyQueenApi\BeautyQueenApi
+      dockerfile: Dockerfile
+    ports:
+      - "7169:80"
+    networks:
+      - beauty-queen-dev
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=beautyQueen
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=postgres
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - wwwrootfiles-data:/app/wwwroot/files
+  db:
+    container_name: postgres_db
+    image: postgres:latest
+    environment:
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: beautyQueen
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
+  wwwrootfiles-data:

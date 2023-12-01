@@ -1,12 +1,28 @@
 ﻿using BeautyQueenApi.Constants;
 using BeautyQueenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BeautyQueenApi.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options) { 
+            try
+            {
+                var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+
+                if(databaseCreator != null)
+                {
+                    if (!databaseCreator.CanConnect()) databaseCreator.Create();
+                    if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Service> Service { get; set; }
         public DbSet<Specialization> Specialization { get; set; }

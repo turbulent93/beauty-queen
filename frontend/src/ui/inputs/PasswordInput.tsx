@@ -10,7 +10,7 @@ interface PasswordInputProps {
 }
 
 export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({label, placeholder, error, ...rest}, ref) => {
-    const [close, setClose] = useState(false)
+    const [close, setClose] = useState(true)
 
     const handler = () => {
         setClose(!close)

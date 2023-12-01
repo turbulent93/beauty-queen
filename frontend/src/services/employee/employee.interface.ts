@@ -17,6 +17,7 @@ export interface IEmployeeWithIdsDto extends Omit<IEmployee, "specialization" | 
     imageId: number
     specializationId: number
     serviceIds?: number[] 
+    image: IFile
     userId: number
 }
 

@@ -2,6 +2,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { useImageMutation } from "@/hooks/useEmployeeImageMutation"
 import { useFormData } from "@/hooks/useFormData"
 import { useErrorToast, useSuccessToast } from "@/hooks/useToast"
+import { IFile } from "@/services/upload/upload.interface"
 import { UploadService } from "@/services/upload/upload.service"
 import clsx from "clsx"
 import { FC } from "react"
@@ -19,17 +20,20 @@ type UploadInputProps = {
 type MultipleFileProps = {
     multiple: true
     setValue: (value?: number[]) => void
+    value?: IFile[]
 }
 
 type SingleFileProps = {
     multiple?: boolean
     setValue: (value?: number) => void
+    value?: IFile
 }
 
 export const UploadInput: FC<UploadInputProps> = ({
     placeholder, 
     multiple, 
-    setValue, 
+    setValue,
+    value, 
     error
 }) => {
     const {user} = useAuth()
@@ -54,7 +58,11 @@ export const UploadInput: FC<UploadInputProps> = ({
             </label>
             <div className="flex gap-1 flex-wrap">
                 {
-                    data?.data?.map(photo => (
+                    value && !multiple ?
+                    <UploadedImage
+                        path={value.source}
+                        remove={() => removeMutate(value.id)} /> :
+                    (value as IFile[] || data?.data)?.map(photo => (
                         <UploadedImage
                             key={photo.id}
                             path={photo.source}

@@ -32,7 +32,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(p => p.AddPolicy("FrontendPolicy", build =>
 {
-    build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+    build.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 }));
 
 builder.Services.AddControllers();
@@ -40,8 +40,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+var database = Environment.GetEnvironmentVariable("POSTGRES_DB");
+var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+var username = Environment.GetEnvironmentVariable("POSTGRES_USER");
+
+var connectionString = $"Server=host.docker.internal;Port={port};Database={database};Password={password};Username={username};";
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PgsqlConnection")));
+    options.UseNpgsql(connectionString));
 
 var config = TypeAdapterConfig.GlobalSettings;
 
