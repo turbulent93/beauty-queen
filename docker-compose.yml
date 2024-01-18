@@ -19,9 +19,9 @@ services:
       - api
   api:
     container_name: beauty-queen-api
-    image: docker.io/library/beautyqueenapi123
+    image: docker.io/library/beauty-queen-api
     build:
-      context: BeautyQueenApi\BeautyQueenApi
+      context: BeautyQueenApi/BeautyQueenApi
       dockerfile: Dockerfile
     ports:
       - "7169:80"
