@@ -40,9 +40,6 @@ namespace BeautyQueenApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PromotionId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ScheduleId")
                         .HasColumnType("integer");
 
@@ -55,8 +52,6 @@ namespace BeautyQueenApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("PromotionId");
 
                     b.HasIndex("ScheduleId");
 
@@ -73,27 +68,17 @@ namespace BeautyQueenApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("SpecializationId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId")
-                        .IsUnique();
 
                     b.HasIndex("SpecializationId");
 
@@ -103,7 +88,7 @@ namespace BeautyQueenApi.Migrations
                     b.ToTable("Employee");
                 });
 
-            modelBuilder.Entity("BeautyQueenApi.Models.Image", b =>
+            modelBuilder.Entity("BeautyQueenApi.Models.Permission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,25 +96,21 @@ namespace BeautyQueenApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Source")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
+                    b.Property<int>("GroupId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("GroupId");
 
-                    b.ToTable("Image");
+                    b.ToTable("Permission");
                 });
 
-            modelBuilder.Entity("BeautyQueenApi.Models.Meta", b =>
+            modelBuilder.Entity("BeautyQueenApi.Models.PermissionGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,86 +118,13 @@ namespace BeautyQueenApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Meta");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1
-                        });
-                });
-
-            modelBuilder.Entity("BeautyQueenApi.Models.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FileId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FileId")
-                        .IsUnique();
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("Photo");
-                });
-
-            modelBuilder.Entity("BeautyQueenApi.Models.Promotion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Discount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly?>("PeriodFrom")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly?>("PeriodTo")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UnitId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId")
-                        .IsUnique();
-
-                    b.HasIndex("UnitId");
-
-                    b.ToTable("Promo");
+                    b.ToTable("PermissionGroup");
                 });
 
             modelBuilder.Entity("BeautyQueenApi.Models.Role", b =>
@@ -231,21 +139,14 @@ namespace BeautyQueenApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.HasIndex("UserId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Админ"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Мастер"
-                        });
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("BeautyQueenApi.Models.Schedule", b =>
@@ -298,63 +199,6 @@ namespace BeautyQueenApi.Migrations
                     b.ToTable("Service");
                 });
 
-            modelBuilder.Entity("BeautyQueenApi.Models.Settings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<TimeOnly>("DefaultEndWorkTime")
-                        .HasColumnType("time without time zone");
-
-                    b.Property<TimeOnly>("DefaultStartWorkTime")
-                        .HasColumnType("time without time zone");
-
-                    b.Property<int?>("FaviconId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Mail")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MainDescription")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("MainPhotoId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("MainTitle")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Vk")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FaviconId")
-                        .IsUnique();
-
-                    b.HasIndex("MainPhotoId")
-                        .IsUnique();
-
-                    b.ToTable("Settings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DefaultEndWorkTime = new TimeOnly(18, 0, 0),
-                            DefaultStartWorkTime = new TimeOnly(10, 0, 0)
-                        });
-                });
-
             modelBuilder.Entity("BeautyQueenApi.Models.Specialization", b =>
                 {
                     b.Property<int>("Id")
@@ -370,35 +214,6 @@ namespace BeautyQueenApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specialization");
-                });
-
-            modelBuilder.Entity("BeautyQueenApi.Models.Unit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Unit");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "р"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "%"
-                        });
                 });
 
             modelBuilder.Entity("BeautyQueenApi.Models.User", b =>
@@ -431,8 +246,6 @@ namespace BeautyQueenApi.Migrations
                     b.HasIndex("Login")
                         .IsUnique();
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("User");
 
                     b.HasData(
@@ -440,7 +253,7 @@ namespace BeautyQueenApi.Migrations
                         {
                             Id = 1,
                             Login = "login1",
-                            Password = "$2a$11$.D3yIlhEXmM3tm5JTkXE8OW9z1qcUslGqqRjAEDCw6G2PbyoUVsTC",
+                            Password = "$2a$11$1GOqr8mu3a0ckCp.t1zFNeXKtQJm0bv4dmA9fV4TGaA5epsJmVVy.",
                             RoleId = 1
                         });
                 });
@@ -460,19 +273,19 @@ namespace BeautyQueenApi.Migrations
                     b.ToTable("EmployeeService");
                 });
 
-            modelBuilder.Entity("PromotionService", b =>
+            modelBuilder.Entity("PermissionRole", b =>
                 {
-                    b.Property<int>("PromotionsId")
+                    b.Property<int>("PermissionsId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ServicesId")
+                    b.Property<int>("RolesId")
                         .HasColumnType("integer");
 
-                    b.HasKey("PromotionsId", "ServicesId");
+                    b.HasKey("PermissionsId", "RolesId");
 
-                    b.HasIndex("ServicesId");
+                    b.HasIndex("RolesId");
 
-                    b.ToTable("PromotionService");
+                    b.ToTable("PermissionRole");
                 });
 
             modelBuilder.Entity("BeautyQueenApi.Models.Appointment", b =>
@@ -482,10 +295,6 @@ namespace BeautyQueenApi.Migrations
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BeautyQueenApi.Models.Promotion", "Promotion")
-                        .WithMany()
-                        .HasForeignKey("PromotionId");
 
                     b.HasOne("BeautyQueenApi.Models.Schedule", "Schedule")
                         .WithMany()
@@ -501,8 +310,6 @@ namespace BeautyQueenApi.Migrations
 
                     b.Navigation("Employee");
 
-                    b.Navigation("Promotion");
-
                     b.Navigation("Schedule");
 
                     b.Navigation("Service");
@@ -510,10 +317,6 @@ namespace BeautyQueenApi.Migrations
 
             modelBuilder.Entity("BeautyQueenApi.Models.Employee", b =>
                 {
-                    b.HasOne("BeautyQueenApi.Models.Image", "Image")
-                        .WithOne("Employee")
-                        .HasForeignKey("BeautyQueenApi.Models.Employee", "ImageId");
-
                     b.HasOne("BeautyQueenApi.Models.Specialization", "Specialization")
                         .WithMany()
                         .HasForeignKey("SpecializationId")
@@ -526,60 +329,27 @@ namespace BeautyQueenApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Image");
-
                     b.Navigation("Specialization");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BeautyQueenApi.Models.Image", b =>
+            modelBuilder.Entity("BeautyQueenApi.Models.Permission", b =>
                 {
-                    b.HasOne("BeautyQueenApi.Models.User", "User")
+                    b.HasOne("BeautyQueenApi.Models.PermissionGroup", "Group")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("BeautyQueenApi.Models.Photo", b =>
+            modelBuilder.Entity("BeautyQueenApi.Models.Role", b =>
                 {
-                    b.HasOne("BeautyQueenApi.Models.Image", "File")
-                        .WithOne("Photo")
-                        .HasForeignKey("BeautyQueenApi.Models.Photo", "FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BeautyQueenApi.Models.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("File");
-
-                    b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("BeautyQueenApi.Models.Promotion", b =>
-                {
-                    b.HasOne("BeautyQueenApi.Models.Image", "Image")
-                        .WithOne("Promo")
-                        .HasForeignKey("BeautyQueenApi.Models.Promotion", "ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BeautyQueenApi.Models.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-
-                    b.Navigation("Unit");
+                    b.HasOne("BeautyQueenApi.Models.User", null)
+                        .WithMany("Role")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BeautyQueenApi.Models.Schedule", b =>
@@ -591,32 +361,6 @@ namespace BeautyQueenApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("BeautyQueenApi.Models.Settings", b =>
-                {
-                    b.HasOne("BeautyQueenApi.Models.Image", "Favicon")
-                        .WithOne("Favicon")
-                        .HasForeignKey("BeautyQueenApi.Models.Settings", "FaviconId");
-
-                    b.HasOne("BeautyQueenApi.Models.Image", "MainPhoto")
-                        .WithOne("MainPhoto")
-                        .HasForeignKey("BeautyQueenApi.Models.Settings", "MainPhotoId");
-
-                    b.Navigation("Favicon");
-
-                    b.Navigation("MainPhoto");
-                });
-
-            modelBuilder.Entity("BeautyQueenApi.Models.User", b =>
-                {
-                    b.HasOne("BeautyQueenApi.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EmployeeService", b =>
@@ -634,36 +378,18 @@ namespace BeautyQueenApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PromotionService", b =>
+            modelBuilder.Entity("PermissionRole", b =>
                 {
-                    b.HasOne("BeautyQueenApi.Models.Promotion", null)
+                    b.HasOne("BeautyQueenApi.Models.Permission", null)
                         .WithMany()
-                        .HasForeignKey("PromotionsId")
+                        .HasForeignKey("PermissionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BeautyQueenApi.Models.Service", null)
+                    b.HasOne("BeautyQueenApi.Models.Role", null)
                         .WithMany()
-                        .HasForeignKey("ServicesId")
+                        .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BeautyQueenApi.Models.Image", b =>
-                {
-                    b.Navigation("Employee")
-                        .IsRequired();
-
-                    b.Navigation("Favicon")
-                        .IsRequired();
-
-                    b.Navigation("MainPhoto")
-                        .IsRequired();
-
-                    b.Navigation("Photo")
-                        .IsRequired();
-
-                    b.Navigation("Promo")
                         .IsRequired();
                 });
 
@@ -671,6 +397,8 @@ namespace BeautyQueenApi.Migrations
                 {
                     b.Navigation("Employee")
                         .IsRequired();
+
+                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

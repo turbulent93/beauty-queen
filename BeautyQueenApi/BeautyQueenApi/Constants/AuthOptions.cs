@@ -5,8 +5,8 @@ namespace BeautyQueenApi.Constants
 {
     public class AuthOptions
     {
-        public const string REGISTER_KEY = "123";
-        public const string INIT_USER_LOGIN = "login1";
+        public const string INIT_ADMIN_ROLE_NAME = "Админ";
+        public const string INIT_ADMIN_LOGIN = "admin";
         public const string INIT_USER_PASSWORD = "Sk3E23r";
 
         const string KEY = "L2AaFLc28x28j2zqbz2Eq2cU";

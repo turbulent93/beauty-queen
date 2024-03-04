@@ -8,10 +8,10 @@ namespace BeautyQueenApi.Models
         [Key]
         public int Id { get; set; }
         public DateOnly Date { get; set; }
-        public int EmployeeId { get; set; }
-        [JsonIgnore]
-        public Employee Employee { get; set; }
         public TimeOnly StartAt { get; set; }
         public TimeOnly EndAt { get; set; }
+        public int EmployeeId { get; set; }
+
+        public Employee Employee { get; set; } = null!;
     }
 }

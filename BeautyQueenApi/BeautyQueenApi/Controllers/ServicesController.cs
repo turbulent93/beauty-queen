@@ -1,8 +1,6 @@
-﻿using BeautyQueenApi.Constants;
-using BeautyQueenApi.Models;
-using BeautyQueenApi.Repositories.ServiceRepository;
-using BeautyQueenApi.Repositories.ServiceRepository.Dtos;
-using Microsoft.AspNetCore.Authorization;
+﻿using BeautyQueenApi.Requests.Pagination;
+using BeautyQueenApi.Requests.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautyQueenApi.Controllers
@@ -11,83 +9,42 @@ namespace BeautyQueenApi.Controllers
     [ApiController]
     public class ServicesController : ControllerBase
     {
-        private readonly IServiceRepository _serviceRepository;
+        private readonly ISender _mediator;
 
-        public ServicesController(IServiceRepository serviceService)
+        public ServicesController(ISender mediator)
         {
-            _serviceRepository = serviceService;
+            _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ServiceDto>>> GetService(string? search, int? promoId, int? employeeId)
+        [HttpPost("get")]
+        public async Task<ActionResult<PaginationResponse<ServiceDto>>> Get(GetServicesRequest request)
         {
-            try
-            {
-                return Ok(await _serviceRepository.Get(search, promoId, employeeId));
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            return await _mediator.Send(request);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceDto>> GetService(int id)
+        public async Task<ActionResult<ServiceDto>> View(int id)
         {
-            try
-            {
-                return Ok(await _serviceRepository.GetById(id));
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            return await _mediator.Send(new ViewServiceRequest { Id = id });
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = RoleOptions.ADMIN_MASTER_ROLE_NAMES)]
-        public async Task<IActionResult> PutService(int id, ServiceDto serviceDto)
+        public async Task<ActionResult<ServiceDto>> Update(int id, CreateOrUpdateServiceRequest request)
         {
-            try
-            {
-                await _serviceRepository.Update(id, serviceDto);
-                return NoContent();
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            request.Id = id;
+            return await _mediator.Send(request);
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleOptions.ADMIN_MASTER_ROLE_NAMES)]
-        public async Task<ActionResult<Service>> PostService(ServiceDto serviceDto)
+        public async Task<ActionResult<ServiceDto>> Create(CreateOrUpdateServiceRequest request)
         {
-            try
-            {
-                ServiceDto service = await _serviceRepository.Add(serviceDto);
-
-                return CreatedAtAction(nameof(PostService), new { id = service.Id }, service);
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            return await _mediator.Send(request);
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = RoleOptions.ADMIN_MASTER_ROLE_NAMES)]
-        public async Task<IActionResult> DeleteService(int id)
+        public async Task<ActionResult<ServiceDto>> Remove(int id)
         {
-            try
-            {
-                await _serviceRepository.Remove(id);
-                return NoContent();
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            return await _mediator.Send(new RemoveServiceRequest { Id = id });
         }
     }
 }

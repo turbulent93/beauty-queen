@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BeautyQueenApi.Requests.Users;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -9,17 +10,24 @@ namespace BeautyQueenApi.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Login { get; set; }
-        [JsonIgnore]
-        public string Password { get; set; }
-        [JsonIgnore]
+        public string Login { get; set; } = null!;
+        public string Password { get; set; } = null!;
         public string? RefreshToken { get; set; }
-        [JsonIgnore]
         public DateTime? ExpiresIn { get; set; }
-        [JsonIgnore]
         public int RoleId { get; set; }
-        public Role Role { get; set; }
-        [JsonIgnore]
-        public Employee Employee { get; set; }
+
+        public List<Role> Roles { get; set; } = null!;
+        public Employee Employee { get; set; } = null!;
+
+        public User(string login, string password)
+        {
+            Login = login;
+            Password = password;
+        }
+
+        public void Update(CreateOrUpdateUserRequest request) {
+            Login = request.Login;
+            Password = request.Password;
+        }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class ResponseStatisticDto
     {
-        public List<string> Labels { get; set; }
-        public List<int> Values { get; set; }
+        public List<string> Labels { get; set; } = null!;
+        public List<int> Values { get; set; } = null!;
     }
 }
